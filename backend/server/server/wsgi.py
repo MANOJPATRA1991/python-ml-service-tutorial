@@ -21,7 +21,8 @@ from apps.ml.registry import MLRegistry
 from apps.ml.income_classifier.random_forest import RandomForestClassifier
 
 try:
-  registry = MLRegistry() # create ML registry
+  # create ML registry
+  registry = MLRegistry()
   # Random Forest classifier
   rf = RandomForestClassifier()
   # add to ML registry
@@ -32,6 +33,7 @@ try:
                         algorithm_version="0.0.1",
                         owner="Manoj",
                         algorithm_description="Random Forest with simple pre- and post-processing",
+                        # Get the source code for RandomForestClassifier class
                         algorithm_code=inspect.getsource(RandomForestClassifier))
 
 except Exception as e:

@@ -75,20 +75,23 @@ class MLRequestViewSet(
 
 class PredictView(views.APIView):
   def post(self, request, endpoint_name, format=None):
-
+    # Get the status from query parameters
     algorithm_status = self.request.query_params.get("status", "production")
+    # Get the version from query parameters
     algorithm_version = self.request.query_params.get("version")
-
+    # Filter algorithms by endpoint_name, algorithm_status, and active status
     algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, status__status = algorithm_status, status__active=True)
-
+    # Filter algorithms by algorithm version if it is not None
     if algorithm_version is not None:
       algs = algs.filter(version = algorithm_version)
-
+    # If no algorithms exist
     if len(algs) == 0:
       return Response(
         {"status": "Error", "message": "ML algorithm is not available"},
         status=status.HTTP_400_BAD_REQUEST,
       )
+    # If more than one algorithms exist and 
+    # status query parameter has a value other than "ab_testing"
     if len(algs) != 1 and algorithm_status != "ab_testing":
       return Response(
         {"status": "Error", "message": "ML algorithm selection is ambiguous. Please specify algorithm version."},
@@ -97,10 +100,11 @@ class PredictView(views.APIView):
     alg_index = 0
     if algorithm_status == "ab_testing":
       alg_index = 0 if rand() < 0.5 else 1
-
+    # Find the algorithm from the ML registry
     algorithm_object = registry.endpoints[algs[alg_index].id]
+    # Get prediction on request data
     prediction = algorithm_object.compute_prediction(request.data)
-
+    
     label = prediction["label"] if "label" in prediction else "error"
     ml_request = MLRequest(
       input_data=json.dumps(request.data),

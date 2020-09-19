@@ -25,6 +25,7 @@ class MLRegistry:
                                   created_by = owner,
                                   parent_mlalgorithm = database_object,
                                   active = True)
+      # save it to the database
       status.save()
 
     # add to registry
