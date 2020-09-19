@@ -1,5 +1,7 @@
-backend/server/apps/endpoints/__pycache__/
-backend/server/server/__pycache__/
-research/.ipynb_checkpoints/
-venv/
-.vscode/
+research/.ipynb_checkpoints
+.vscode
+venv
+/backend/server/apps/endpoints/migrations/__pycache__
+/backend/server/apps/endpoints/__pycache__
+/backend/server/apps/ml/__pycache__
+/backend/server/server/__pycache__
